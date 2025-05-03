@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .option {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #e0e0e0;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .option:hover {
+            background-color: #d0d0d0;
+        }
+        .feedback {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        #nextBtn {
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<h2 id="question">Frage wird geladen...</h2>
+<div id="options"></div>
+<div id="feedback" class="feedback"></div>
+<button id="nextBtn" onclick="nextQuestion()">Weiter</button>
+
+<script>
+    const questions = [{"question": "Wo befindet sich der Schaummittelaufsatz im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befindet sich der B-St\u00fctzkr\u00fcmmer mit Hohlstrahlrohr im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befindet sich der T\u00fcr\u00f6ffner im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befindet sich das C-Hohlstrahlrohr im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befindet sich der Zumischer im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befindet sich die Brechstange (lang) im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befindet sich die ABC Feuerl\u00f6scher im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befinden sich die Erdankerhagel im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befinden sich die Schaummittelbeh\u00e4lter im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befindet sich das Zubeh\u00f6r MZ16 im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befindet sich der Vorschlaghammer im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befindet sich der Mehrzweckzug MZ16 im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befindet sich die Rettungss\u00e4ge im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befindet sich die HIPress im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befindet sich die Tigers\u00e4ge im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befindet sich das Plateu im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befindet sich der B-St\u00fctzkr\u00fcmmer mit Mehrzweckstrahrohr im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befindet sich die Motors\u00e4ge im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befindet sich der Elektrotrennschleifer im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}, {"question": "Wo befindet sich der CO2 Feuerl\u00f6scher im Fahrzeug ?", "options": ["G1", "G2", "G3", "G4", "Haspel"], "answer": "G1"}];
+    let current = 0;
+    let score = 0;
+    let answered = false;
+
+    function showQuestion() {
+        answered = false;
+        document.getElementById("options").innerHTML = "";
+        document.getElementById("feedback").innerText = "";
+        document.getElementById("nextBtn").style.display = "none";
+
+        if (current >= questions.length) {
+            document.getElementById("question").innerHTML = "Du hast " + score + " von " + questions.length + " richtig!";
+            return;
+        }
+        const q = questions[current];
+        document.getElementById("question").innerText = (current + 1) + ". " + q.question;
+        q.options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.className = "option";
+            btn.innerText = opt;
+            btn.onclick = () => {
+                if (answered) return;
+                answered = true;
+                const correct = opt.trim().toLowerCase() === q.answer.trim().toLowerCase();
+                if (correct) {
+                    score++;
+                    document.getElementById("feedback").innerText = "Richtig!";
+                    document.getElementById("feedback").style.color = "green";
+                } else {
+                    document.getElementById("feedback").innerText = "Falsch! Richtige Antwort: " + q.answer;
+                    document.getElementById("feedback").style.color = "red";
+                }
+                document.getElementById("nextBtn").style.display = "block";
+            };
+            document.getElementById("options").appendChild(btn);
+        });
+    }
+
+    function nextQuestion() {
+        current++;
+        showQuestion();
+    }
+
+    showQuestion();
+</script>
+
+</body>
+</html>
